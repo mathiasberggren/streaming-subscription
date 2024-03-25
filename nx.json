@@ -34,7 +34,36 @@
       "options": {
         "targetName": "test"
       }
+    },
+    {
+      "plugin": "@nx/expo/plugin",
+      "options": {
+        "startTargetName": "start",
+        "serveTargetName": "serve",
+        "runIosTargetName": "run-ios",
+        "runAndroidTargetName": "run-android",
+        "exportTargetName": "export",
+        "prebuildTargetName": "prebuild",
+        "installTargetName": "install",
+        "buildTargetName": "build",
+        "submitTargetName": "submit"
+      }
+    },
+    {
+      "plugin": "@nx/react-native/plugin",
+      "options": {
+        "startTargetName": "start",
+        "podInstallTargetName": "pod-install",
+        "bundleTargetName": "bundle",
+        "runIosTargetName": "run-ios",
+        "runAndroidTargetName": "run-android",
+        "buildIosTargetName": "build-ios",
+        "buildAndroidTargetName": "build-android",
+        "syncDepsTargetName": "sync-deps",
+        "upgradeTargetname": "upgrade"
+      }
     }
   ],
-  "nxCloudAccessToken": "ZjQ1ZmNjMDgtNzc5ZC00Y2E5LWI1NDUtZGVkMjNjNWIzM2UwfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "ZjQ1ZmNjMDgtNzc5ZC00Y2E5LWI1NDUtZGVkMjNjNWIzM2UwfHJlYWQtd3JpdGU=",
+  "defaultBase": "main"
 }
