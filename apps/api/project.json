@@ -1,21 +1,21 @@
 {
-  "name": "streaming-subscription",
+  "name": "api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/streaming-subscription/src",
+  "sourceRoot": "apps/api/src",
   "projectType": "application",
   "targets": {
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "streaming-subscription:build"
+        "buildTarget": "api:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "streaming-subscription:build:development"
+          "buildTarget": "api:build:development"
         },
         "production": {
-          "buildTarget": "streaming-subscription:build:production"
+          "buildTarget": "api:build:production"
         }
       }
     }
