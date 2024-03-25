@@ -3,7 +3,7 @@ import { spawn } from 'child_process';
 
 var __TEARDOWN_MESSAGE__: string;
 
-module.exports = async function() {
+module.exports = async function () {
   // Start services that that the app needs to run (e.g. database, docker-compose, etc.).
   console.log('\nSetting up...\n');
 
@@ -21,4 +21,3 @@ module.exports = async function() {
   // This is a simplistic approach; consider polling a health endpoint instead
   await new Promise((resolve) => setTimeout(resolve, 5000));
 };
-
