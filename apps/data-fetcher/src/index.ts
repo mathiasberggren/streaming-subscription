@@ -10,13 +10,14 @@ import puppeteer from 'puppeteer'
 
 
 
-    let movies: string[] = []
+    const movies: string[] = []
 
     // Used to keep track of what has been processed in the infinite loading screen
     let lastMovieCount = 0;
-    let moviesProcessed = new Set();
+    const moviesProcessed = new Set();
     let newMovies: string[] = [];
 
+    // eslint-disable-next-line no-constant-condition
     while(true) {
         console.log("before waiter for link selectors")
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -46,10 +47,10 @@ import puppeteer from 'puppeteer'
             break;
         }
 
-        for (let href of links) {
+        for (const href of links) {
             moviesProcessed.add(href);
             await page.goto(href);
-            
+
             const info = await page.evaluate(() => {
                 return document.querySelector('h1')?.innerText;
             });
