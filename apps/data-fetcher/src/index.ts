@@ -1,9 +1,9 @@
 import puppeteer from 'puppeteer'
 
 (async () => {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-    await page.goto('https://www.justwatch.com/se/filmer')
+    const browser = await puppeteer.launch({ headless: false })
+    const mainPage = await browser.newPage()
+    await mainPage.goto('https://www.justwatch.com/se/filmer')
 
     const linkSelector = 'a.title-list-grid__item--link';
 
@@ -24,7 +24,7 @@ import puppeteer from 'puppeteer'
 
         console.log("after waiter for link selectors")
 
-        const links = await page.$$eval(linkSelector, anchors => anchors.map(anchor => anchor.href));
+        const links = await mainPage.$$eval(linkSelector, anchors => anchors.map(anchor => anchor.href));
 
         console.log("These are the links")
         console.log(links)
@@ -49,11 +49,25 @@ import puppeteer from 'puppeteer'
 
         for (const href of links) {
             moviesProcessed.add(href);
+<<<<<<< Updated upstream
             await page.goto(href);
 
             const info = await page.evaluate(() => {
+=======
+            // Open a new tab for each href to not ruin scrolling position for main page
+            const newPage = await browser.newPage();
+            await newPage.goto(href);
+            
+            // Data extraction for a specific movie will be done here
+            const info = await newPage.evaluate(() => {
+>>>>>>> Stashed changes
                 return document.querySelector('h1')?.innerText;
             });
+
+            await newPage.close();
+
+            // Avoid trigger rate-limiting
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             info ? movies.push(info) : undefined;
 
@@ -62,7 +76,7 @@ import puppeteer from 'puppeteer'
         lastMovieCount = movies.length;
 
         // Scroll down
-        await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
+        await mainPage.evaluate('window.scrollTo(0, document.body.scrollHeight)');
 
         // Wait for lazy loaded images etc
         await new Promise(resolve => setTimeout(resolve, 2000));
