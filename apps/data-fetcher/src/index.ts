@@ -17,51 +17,33 @@ import puppeteer from 'puppeteer'
     const moviesProcessed = new Set();
     let newMovies: string[] = [];
 
-    // eslint-disable-next-line no-constant-condition
     while(true) {
-        console.log("before waiter for link selectors")
         await new Promise(resolve => setTimeout(resolve, 2000));
-
-        console.log("after waiter for link selectors")
 
         const links = await mainPage.$$eval(linkSelector, anchors => anchors.map(anchor => anchor.href));
 
-        console.log("These are the links")
-        console.log(links)
-
         // Determine the new movies by filtering out the already processed links
         newMovies = links.filter(href => {
-            const condition = !moviesProcessed.has(href)
-            console.log("evaluated")
-            console.log(href)
-            console.log(condition)
-            return condition
+            const movieHasNotBeenProcessed = !moviesProcessed.has(href)
+            return movieHasNotBeenProcessed
         });
 
-        console.log("These are the new movies")
-        console.log(newMovies)
 
         // If there are no new movies, then we assume we've reached the end
         if (newMovies.length === 0 || newMovies.length === lastMovieCount) {
-            console.log('No more new items found, or same item count reached.');
+            console.log('No more new items found, or same item count reached.')
             break;
         }
 
-        for (const href of links) {
+        for (let href of links) {
             moviesProcessed.add(href);
-<<<<<<< Updated upstream
-            await page.goto(href);
-
-            const info = await page.evaluate(() => {
-=======
             // Open a new tab for each href to not ruin scrolling position for main page
             const newPage = await browser.newPage();
             await newPage.goto(href);
             
             // Data extraction for a specific movie will be done here
             const info = await newPage.evaluate(() => {
->>>>>>> Stashed changes
-                return document.querySelector('h1')?.innerText;
+                return document.querySelector('h1')?.innerText
             });
 
             await newPage.close();
@@ -79,7 +61,7 @@ import puppeteer from 'puppeteer'
         await mainPage.evaluate('window.scrollTo(0, document.body.scrollHeight)');
 
         // Wait for lazy loaded images etc
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2000))
     }
 
     console.log("This is the extracted info")
