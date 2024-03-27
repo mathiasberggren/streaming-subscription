@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import puppeteer from 'puppeteer'
 
 (async () => {
@@ -35,12 +36,12 @@ import puppeteer from 'puppeteer'
             break;
         }
 
-        for (let href of links) {
+        for (const href of links) {
             moviesProcessed.add(href);
             // Open a new tab for each href to not ruin scrolling position for main page
             const newPage = await browser.newPage();
             await newPage.goto(href);
-            
+
             // Data extraction for a specific movie will be done here
             const info = await newPage.evaluate(() => {
                 return document.querySelector('h1')?.innerText
