@@ -1,14 +1,17 @@
 {
-  "extends": ["../../.eslintrc.json"],
+  "extends": ["../../.eslintrc.json"], // Extend the root configuration
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "rules": {} // Make sure not to override or remove any rules you want to inherit
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "rules": {},
+      "parserOptions": {
+        "project": ["apps/api/tsconfig.*?.json"]
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
