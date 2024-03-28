@@ -1,10 +1,10 @@
 {
-  "extends": ["../../.eslintrc.json"], // Extend the root configuration
+  "extends": ["../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {} // Make sure not to override or remove any rules you want to inherit
+      "rules": {}
     },
     {
       "files": ["*.ts", "*.tsx"],
