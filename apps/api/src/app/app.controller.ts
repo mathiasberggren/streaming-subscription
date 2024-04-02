@@ -9,6 +9,7 @@ export class AppController {
   @Get()
   getData (@Req() request: Request) {
     this.logger.log(request, 'AppController#getData')
+
     return this.appService.getData()
   }
 }
