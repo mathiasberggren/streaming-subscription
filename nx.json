@@ -15,5 +15,16 @@
       }
     }
   ],
+  "targetDefaults": {
+    "build": {
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    }
+  },
   "nxCloudAccessToken": "Zjc0MjhmYTEtYzdiNy00MTllLWI0MWUtZmIzYTQ4NDE0NmNjfHJlYWQtd3JpdGU="
 }
