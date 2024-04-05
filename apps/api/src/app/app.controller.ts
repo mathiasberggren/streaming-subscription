@@ -1,6 +1,6 @@
-import { Controller, Get, type Logger, Req } from '@nestjs/common'
-import { type Request } from 'express'
-import { type AppService } from './app.service'
+import { Controller, Get, Logger, Req } from '@nestjs/common'
+import { Request } from 'express'
+import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
@@ -11,7 +11,6 @@ export class AppController {
 
   @Get()
   getData (@Req() request: Request) {
-    console.log('this.logger', this.logger)
     this.logger.log(request, 'AppController#getData')
 
     return this.appService.getData()
