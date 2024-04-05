@@ -15,6 +15,8 @@ import {
   WinstonModule
 } from 'nest-winston'
 import * as winston from 'winston'
+import { patchNestJsSwagger } from 'nestjs-zod'
+
 import { AppModule } from './app/app.module'
 
 const API_PREFIX = 'api'
@@ -23,6 +25,7 @@ const OPENAPI_PREFIX = 'docs'
 export let viteNodeApp: Promise<INestApplication>
 
 function bootstrapOpenAPI (app: INestApplication) {
+  patchNestJsSwagger()
   const config = new DocumentBuilder()
     .setTitle('Streaming Subscription API')
     .setDescription('The API for managing subscriptions from streaming services')
