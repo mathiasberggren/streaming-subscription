@@ -43,4 +43,8 @@ async function bootstrap () {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-bootstrap()
+if (process.env.NODE_ENV === 'production') {
+  void bootstrap()
+}
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+export const viteNodeApp = NestFactory.create(AppModule)
