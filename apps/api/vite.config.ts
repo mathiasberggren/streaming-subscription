@@ -4,6 +4,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig(({ command, mode }: ConfigEnv) => {
   return {
+    base: '/api',
     server: {
       // vite server configs, for details see \[vite doc\](https://vitejs.dev/config/#server-host)
       port: 3000
