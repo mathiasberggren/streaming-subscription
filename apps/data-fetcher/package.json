@@ -1,0 +1,25 @@
+{
+  "name": "data-fetcher",
+  "version": "1.0.0",
+  "description": "Gets information regarding content",
+  "main": "./dist/main.js",
+  "author": "Mathias Berggren",
+  "type": "module",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "vite build",
+    "dev": "tsx watch ./src/main.ts"
+  },
+  "dependencies": {
+    "puppeteer": "^22.6.0"
+  },
+  "devDependencies": {
+    "@liuli-util/vite-plugin-node": "^0.8.1",
+    "@types/puppeteer": "^7.0.4",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.8"
+  }
+}

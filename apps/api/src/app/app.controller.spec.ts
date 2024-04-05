@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { Test, type TestingModule } from '@nestjs/testing'
-import { type Request } from 'express'
+import { Test, TestingModule } from '@nestjs/testing'
+import { Request } from 'express'
 import { createMock } from '@golevelup/ts-jest'
 import { Logger } from '@nestjs/common'
 

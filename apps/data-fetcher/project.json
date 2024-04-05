@@ -3,54 +3,5 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/data-fetcher/src",
   "projectType": "application",
-  "targets": {
-    "build": {
-      "executor": "@nx/esbuild:esbuild",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "platform": "node",
-        "outputPath": "dist/apps/data-fetcher",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "apps/data-fetcher/src/main.ts",
-        "tsConfig": "apps/data-fetcher/tsconfig.app.json",
-        "assets": ["apps/data-fetcher/src/assets"],
-        "generatePackageJson": true,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
-      },
-      "configurations": {
-        "development": {},
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
-      }
-    },
-    "serve": {
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "options": {
-        "buildTarget": "data-fetcher:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "data-fetcher:build:development"
-        },
-        "production": {
-          "buildTarget": "data-fetcher:build:production"
-        }
-      }
-    }
-  },
   "tags": []
 }

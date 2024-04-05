@@ -6,7 +6,10 @@
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 
-import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston'
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule
+} from 'nest-winston'
 import * as winston from 'winston'
 import { AppModule } from './app/app.module'
 
@@ -40,4 +43,8 @@ async function bootstrap () {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
-bootstrap()
+if (process.env.NODE_ENV === 'production') {
+  void bootstrap()
+}
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+export const viteNodeApp = NestFactory.create(AppModule)
