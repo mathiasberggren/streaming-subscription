@@ -5,5 +5,7 @@ import { MoviesSearch } from './interfaces/movies-search.interface'
 
 @Injectable()
 export abstract class MoviesSearchService implements MoviesSearch {
+  // TODO: Implement Movie response interface
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract findByTitle (title: string): Promise<any>
 }

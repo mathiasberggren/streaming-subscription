@@ -4,9 +4,10 @@ import { MoviesController } from './movies.controller'
 import { StreamingApiModule } from './clients/streaming-api.module'
 import { MoviesSearchApiService } from './movies-search.api.service'
 import { MoviesSearchService } from './movies-search.service'
+import { ImdbApiModule } from './clients/imdb-api.module'
 
 @Module({
-  imports: [StreamingApiModule],
+  imports: [StreamingApiModule, ImdbApiModule],
   controllers: [MoviesController],
   providers: [
     MoviesService,
