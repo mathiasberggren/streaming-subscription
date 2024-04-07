@@ -6,9 +6,10 @@ import { ZodValidationPipe } from 'nestjs-zod'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { DatabaseModule } from '../database/database.module'
+import { MoviesModule } from '../movies/movies.module'
 
 @Module({
-  imports: [ConfigModule.forRoot(), DatabaseModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, MoviesModule],
   controllers: [AppController],
   providers: [
     Logger,
