@@ -1,0 +1,9 @@
+model SubscriptionOffer {
+  subscriptionId   Int      @id @default(autoincrement())
+  companyId        Int
+  accountId        Int
+  cost             Float
+  active           Boolean
+  StreamingService StreamingService @relation(fields: [companyId], references: [companyId])
+  Account          Account          @relation(fields: [accountId], references: [id])
+}

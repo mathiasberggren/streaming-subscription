@@ -1,0 +1,8 @@
+model Subtitle {
+  languageId Int
+  movieId    Int
+  Language   Language @relation(fields: [languageId], references: [id])
+  Movie      Movie    @relation(fields: [movieId], references: [id])
+
+  @@id([languageId, movieId])
+}

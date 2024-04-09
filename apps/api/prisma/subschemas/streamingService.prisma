@@ -1,0 +1,6 @@
+model StreamingService {
+  companyId             Int                  @id @default(autoincrement())
+  companyName           String
+  subscriptionOffers    SubscriptionOffer[]
+  streamingAvailabilities StreamingAvailability[]
+}
