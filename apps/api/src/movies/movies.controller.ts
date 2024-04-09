@@ -9,7 +9,9 @@ export class MoviesController {
   constructor (private readonly moviesService: MoviesService, private readonly movieSearchService: MoviesSearchService) {}
 
   @Get('search')
-  async findByTitle (@Query('title') title: string) {
+  // TODO: change return type to Movie[] when the entity is defined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async findByTitle (@Query('title') title: string): Promise<any> {
     return await this.movieSearchService.findByTitle(title)
   }
 
