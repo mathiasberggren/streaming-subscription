@@ -1,0 +1,7 @@
+model Actor {
+  actorId     Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  birthDate   DateTime?
+  movies      Movie[]  @relation("ParticipatesIn")
+}
