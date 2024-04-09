@@ -1,0 +1,7 @@
+//🧩Don't Edit this file.✨Generated in Tue Apr 09 2024 20:47:08 GMT+0200 (Central European Summer Time)✨
+model Movie {
+  id        Int      @id @default(autoincrement())
+  title     String
+  director  String
+  createdAt DateTime @default(now())
+}
