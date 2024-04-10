@@ -14,7 +14,52 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  subscriptions Subscription[]
+
+  @@map("companies")
+}
+
+model Subscription {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  company   Company  @relation(fields: [companyId], references: [id])
+  companyId Int      @map("company_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  subscriptionCredential SubscriptionCredential?
+
+  @@unique([userId, companyId])
+  @@index([userId, companyId])
+  @@map("subscriptions")
+}
+
+model SubscriptionCredential {
+  id             Int          @id @default(autoincrement())
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  subscriptionId Int          @unique @map("subscription_id")
+  username       String
+  password       String
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  @@map("subscription_credentials")
 }
