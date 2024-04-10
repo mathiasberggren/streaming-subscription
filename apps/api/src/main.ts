@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { NestFactory } from '@nestjs/core'
-
 import {
   utilities as nestWinstonModuleUtilities,
   WinstonModule
