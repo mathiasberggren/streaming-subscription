@@ -80,5 +80,8 @@
   },
   "prisma": {
     "schema": "src/database/schema.prisma"
+  },
+  "volta": {
+    "extends": "../../package.json"
   }
 }
