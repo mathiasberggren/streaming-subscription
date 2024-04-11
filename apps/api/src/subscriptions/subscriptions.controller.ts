@@ -11,7 +11,7 @@ import { SubscriptionResponse } from './entities/subscription.entity'
 @ApiTags('subscriptions')
 @Controller('subscriptions')
 export class SubscriptionsController {
-  constructor (private readonly subscriptionsService: SubscriptionsService) {}
+  constructor (private readonly subscriptionsService: SubscriptionsService, private readonly logger: Logger) {}
 
   @Post()
   async create (@Body() createSubscriptionDto: CreateSubscriptionDto) {
