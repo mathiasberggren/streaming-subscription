@@ -30,6 +30,22 @@
         "@typescript-eslint/consistent-type-imports": [
           "warn",
           { "prefer": "no-type-imports" }
+        ],
+        "import/order": [
+          1,
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "newlines-between": "always"
+          }
         ]
       }
     },

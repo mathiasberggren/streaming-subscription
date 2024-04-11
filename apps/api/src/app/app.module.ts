@@ -3,10 +3,11 @@ import { ConfigModule } from '@nestjs/config'
 import { APP_PIPE } from '@nestjs/core'
 import { ZodValidationPipe } from 'nestjs-zod'
 
-import { AppController } from './app.controller'
-import { AppService } from './app.service'
 import { DatabaseModule } from '../database/database.module'
 import { MoviesModule } from '../movies/movies.module'
+
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
 import { validate } from './config/validate'
 
 @Module({
