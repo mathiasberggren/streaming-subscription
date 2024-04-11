@@ -1,35 +1,37 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 
 import { SubscriptionsService } from './subscriptions.service'
 import { CreateSubscriptionDto } from './dto/create-subscription.dto'
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto'
 
+@ApiTags('subscriptions')
 @Controller('subscriptions')
 export class SubscriptionsController {
-  constructor (private readonly subscriptionsService: SubscriptionsService) {}
+  constructor (private readonly subscriptionsService: SubscriptionsService, private readonly logger: Logger) {}
 
   @Post()
-  create (@Body() createSubscriptionDto: CreateSubscriptionDto) {
-    return this.subscriptionsService.create(createSubscriptionDto)
+  async create (@Body() createSubscriptionDto: CreateSubscriptionDto) {
+    await this.subscriptionsService.create(createSubscriptionDto)
   }
 
   @Get()
-  findAll () {
-    return this.subscriptionsService.findAll()
+  async findAll () {
+    return await this.subscriptionsService.findAll()
   }
 
   @Get(':id')
-  findOne (@Param('id') id: string) {
-    return this.subscriptionsService.findOne(+id)
+  async findOne (@Param('id') id: string) {
+    return await this.subscriptionsService.findOne(+id)
   }
 
   @Patch(':id')
-  update (@Param('id') id: string, @Body() updateSubscriptionDto: UpdateSubscriptionDto) {
-    return this.subscriptionsService.update(+id, updateSubscriptionDto)
+  async update (@Param('id') id: string, @Body() updateSubscriptionDto: UpdateSubscriptionDto) {
+    return await this.subscriptionsService.update(+id, updateSubscriptionDto)
   }
 
   @Delete(':id')
-  remove (@Param('id') id: string) {
-    return this.subscriptionsService.remove(+id)
+  async remove (@Param('id') id: string) {
+    return await this.subscriptionsService.remove(+id)
   }
 }
