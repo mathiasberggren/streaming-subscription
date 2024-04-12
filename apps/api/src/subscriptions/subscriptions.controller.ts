@@ -12,7 +12,7 @@ export class SubscriptionsController {
 
   @Post()
   async create (@Body() createSubscriptionDto: CreateSubscriptionDto) {
-    await this.subscriptionsService.create(createSubscriptionDto)
+    return await this.subscriptionsService.create(createSubscriptionDto)
   }
 
   @Get()

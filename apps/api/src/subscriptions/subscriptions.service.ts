@@ -33,7 +33,7 @@ export class SubscriptionsService {
     }
 
     try {
-      await this.db.subscription.create({ data: subscription })
+      return await this.db.subscription.create({ data: subscription })
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2025') {
@@ -52,6 +52,22 @@ export class SubscriptionsService {
     return await this.db.subscription.findUnique({
       where: {
         id
+      }
+    })
+  }
+
+  async findByUserId (userId: number) {
+    return await this.db.subscription.findMany({
+      where: {
+        userId
+      }
+    })
+  }
+
+  async findByCompanyId (companyId: number) {
+    return await this.db.subscription.findMany({
+      where: {
+        companyId
       }
     })
   }
