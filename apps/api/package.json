@@ -1,25 +1,37 @@
 {
   "name": "api",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
   "private": true,
+  "description": "",
   "license": "MIT",
+  "author": "",
   "scripts": {
     "build": "vite build",
     "start": "nest start",
     "dev": "vite",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "console": "npm run start -- --watch --entryFile repl",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:migrate": "npx prisma migrate dev",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "start": "nest start",
+    "start:debug": "nest start --debug --watch",
+    "start:dev": "vite",
+    "start:prod": "node dist/main",
     "test": "jest",
-    "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:migrate": "npx prisma migrate dev",
-    "db:deploy": "npx prisma migrate deploy",
-    "console": "npm run start -- --watch --entryFile repl"
+    "test:watch": "jest --watch"
+  },
+  "lint-staged": {
+    "{src,apps,libs,test}/**/*.ts": [
+      "eslint --fix"
+    ],
+    "package.json": [
+      "npx -y sort-package-json"
+    ]
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
@@ -72,11 +84,11 @@
     "vite-plugin-node": "^3.1.0",
     "vite-tsconfig-paths": "^4.3.2"
   },
+  "volta": {
+    "extends": "../../package.json"
+  },
   "prisma": {
     "schema": "src/database/schema.prisma",
     "seed": "npx tsx src/database/seed.ts"
-  },
-  "volta": {
-    "extends": "../../package.json"
   }
 }
