@@ -1,14 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Logger } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { ZodSerializerDto } from 'nestjs-zod'
 
 import { SubscriptionsService } from './subscriptions.service'
 import { CreateSubscriptionDto } from './dto/create-subscription.dto'
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto'
+import { SubscriptionResponse } from './entities/subscription.entity'
 
+@ZodSerializerDto(SubscriptionResponse)
 @ApiTags('subscriptions')
 @Controller('subscriptions')
 export class SubscriptionsController {
-  constructor (private readonly subscriptionsService: SubscriptionsService, private readonly logger: Logger) {}
+  constructor (private readonly subscriptionsService: SubscriptionsService) {}
 
   @Post()
   async create (@Body() createSubscriptionDto: CreateSubscriptionDto) {
