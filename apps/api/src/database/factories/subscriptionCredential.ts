@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 import { subscriptionFactory } from './subscription'
 
 interface ISubscriptionCredentialFactory extends SubscriptionCredential {
-  subscription: Subscription
+  subscription?: Subscription
 }
 export const subscriptionCredentialFactory = Factory.define<ISubscriptionCredentialFactory>(({ sequence, onCreate }) => {
   onCreate(async (credential) => {
@@ -29,12 +29,9 @@ export const subscriptionCredentialFactory = Factory.define<ISubscriptionCredent
     })
   })
 
-  const subscription = subscriptionFactory.build()
-
   return {
     id: sequence,
-    subscriptionId: subscription.id,
-    subscription,
+    subscriptionId: sequence,
     username: faker.internet.userName(),
     password: faker.internet.password(),
     createdAt: new Date(),

@@ -42,15 +42,10 @@ export const subscriptionFactory = SubscriptionFactory.define(({ sequence, onCre
     })
   })
 
-  const user = userFactory.build()
-  const company = companyFactory.build()
-
   return {
     id: sequence,
-    userId: user.id,
-    user,
-    companyId: company.id,
-    company,
+    userId: sequence,
+    companyId: sequence,
     createdAt: new Date(),
     updatedAt: new Date()
   }

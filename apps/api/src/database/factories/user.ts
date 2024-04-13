@@ -1,8 +1,11 @@
-import { PrismaClient, User } from '@prisma/client'
+import { PrismaClient, Subscription, User } from '@prisma/client'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 
-export const userFactory = Factory.define<User>(({ sequence, onCreate }) => {
+interface IUserFactory extends User {
+  subscription?: Subscription[]
+}
+export const userFactory = Factory.define<IUserFactory>(({ sequence, onCreate }) => {
   onCreate(async (user) => {
     const prisma = new PrismaClient()
     return await prisma.user.create({ data: user })
