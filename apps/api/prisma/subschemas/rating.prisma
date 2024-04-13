@@ -1,9 +1,0 @@
-
-model Rating {
-  ratingId Int      @id @default(autoincrement())
-  movieId  Int
-  site     String
-  rating   Float
-  link     String?
-  Movie    Movie    @relation(fields: [movieId], references: [id])
-}
