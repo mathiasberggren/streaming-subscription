@@ -78,9 +78,9 @@ model Movie {
 
 model MovieTitle {
   movieTitleId Int      @id @default(autoincrement()) @map("movie_title_id")
+  title        String
   movieId      Int      @map("movie_id")
   Movie        Movie    @relation(fields: [movieId], references: [id]) 
-  language    String
-  title        String
+  language     String
 }
 
