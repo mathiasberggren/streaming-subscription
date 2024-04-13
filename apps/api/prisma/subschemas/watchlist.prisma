@@ -1,6 +1,0 @@
-model Watchlist {
-  watchlistId Int    @id @default(autoincrement())
-  userId      Int
-  name        String
-  User        User   @relation(fields: [userId], references: [id])
-}

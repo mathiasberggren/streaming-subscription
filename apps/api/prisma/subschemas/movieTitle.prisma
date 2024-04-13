@@ -1,8 +1,0 @@
-model MovieTitle {
-  movieTitleId  Int      @id @default(autoincrement())
-  movieId       Int
-  languageId    Int
-  title         String
-  Movie         Movie    @relation(fields: [movieId], references: [id])
-  Language      Language @relation(fields: [languageId], references: [id])
-}

@@ -1,9 +1,0 @@
-model Account {
-  id                Int                  @id @default(autoincrement())
-  streamingService  String
-  username          String               @unique
-  password          String
-  user              User                 @relation(fields: [userId], references: [id])
-  userId            Int
-  subscriptionOffers SubscriptionOffer[]
-}

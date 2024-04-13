@@ -1,7 +1,0 @@
-model Language {
-  id   Int          @id @default(autoincrement())
-  name         String
-  streamingAvailabilities   StreamingAvailability[]
-  movieTitles   MovieTitle[]
-  subtitles    Subtitle[]
-}
