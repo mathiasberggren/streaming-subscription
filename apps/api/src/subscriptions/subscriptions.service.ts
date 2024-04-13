@@ -45,7 +45,11 @@ export class SubscriptionsService {
   }
 
   async findAll () {
-    return await this.db.subscription.findMany()
+    return await this.db.subscription.findMany({
+      include: {
+        credentials: true
+      }
+    })
   }
 
   async findOne (id: number) {
