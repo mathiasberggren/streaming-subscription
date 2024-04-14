@@ -1,3 +1,0 @@
-{
-  "*.ts": ["nx affected:lint --fix --files"]
-}

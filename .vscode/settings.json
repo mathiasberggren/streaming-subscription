@@ -1,3 +1,9 @@
 {
-  "conventionalCommits.scopes": ["monorepo", "movie-scraper", "api", "mobile"]
+  "conventionalCommits.scopes": [
+    "monorepo",
+    "movie-scraper",
+    "api",
+    "mobile",
+    "landing-page"
+  ]
 }
