@@ -10,7 +10,7 @@
       "files": ["*.ts", "*.tsx"],
       "rules": {},
       "parserOptions": {
-        "project": ["apps/api/tsconfig.*?.json"]
+        "project": ["./tsconfig.*?.json"]
       }
     },
     {
