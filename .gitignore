@@ -124,5 +124,4 @@ yarn-error.log
 # testing
 /coverage
 
-.nx/installation
-.nx/cache
+.turbo
