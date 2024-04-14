@@ -25,7 +25,7 @@ export class SubscriptionsService {
     }
 
     if (credentials != null) {
-      subscription.subscriptionCredential = {
+      subscription.credentials = {
         create: {
           ...credentials
         }
@@ -97,7 +97,7 @@ export class SubscriptionsService {
     }
 
     if (credentials != null) {
-      subscription.subscriptionCredential = {
+      subscription.credentials = {
         update: {
           ...credentials
         }

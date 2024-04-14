@@ -1,24 +1,12 @@
 import { TestBed } from '@automock/jest'
 
 import { PrismaService } from '../database/prisma.service'
+import { subscriptionFactory } from '../database/factories/subscription'
 
 import { SubscriptionsService } from './subscriptions.service'
 
-// TODO: Replace with model factories
-const mockSubscription = {
-  id: 1,
-  userId: 1,
-  companyId: 1
-}
-const mockSubscriptionWithCredentials = {
-  id: 1,
-  userId: 1,
-  companyId: 1,
-  credentials: {
-    username: 'test',
-    password: 'test'
-  }
-}
+const mockSubscription = subscriptionFactory.build()
+const mockSubscriptionWithCredentials = subscriptionFactory.withCredentials().build()
 
 describe('SubscriptionsService', () => {
   let service: SubscriptionsService
