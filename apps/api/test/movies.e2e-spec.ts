@@ -11,6 +11,8 @@ describe('MoviesController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
+      // Need to fix a separate config setup in order to dependency
+      // inject the ConfigModule correctly
       imports: [ConfigModule, MoviesModule]
     }).compile()
 
