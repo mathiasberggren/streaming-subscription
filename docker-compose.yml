@@ -1,16 +1,4 @@
-version: '3'
-
 services:
-  # Backend API
-  # api:
-  #   extends:
-  #     file: docker-compose.base.yml
-  #     service: nx-app-base
-  #   command: nx serve api
-  #   ports:
-  #     - 3000:3000
-
-  # React App
   database:
     image: postgres:15
     volumes:
@@ -22,6 +10,14 @@ services:
     ports:
       - 5432:5432
 
+  test_database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: tests
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - 5433:5432
+
 volumes:
-  mono-node-modules: null
   postgres_data: null
