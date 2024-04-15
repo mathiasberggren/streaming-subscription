@@ -1,5 +1,7 @@
-import { Company, PrismaClient, Subscription, SubscriptionCredential, User } from '@prisma/client'
+import { Company, Subscription, SubscriptionCredential, User } from '@prisma/client'
 import { Factory } from 'fishery'
+
+import prisma from '../client'
 
 import { userFactory } from './user'
 import { companyFactory } from './company'
@@ -21,8 +23,6 @@ class SubscriptionFactory extends Factory<ISubscriptionFactory> {
 
 export const subscriptionFactory = SubscriptionFactory.define(({ sequence, onCreate }) => {
   onCreate(async (subscription) => {
-    const prisma = new PrismaClient()
-
     const user = await userFactory.create(subscription.user)
     const company = await companyFactory.create(subscription.company)
 
