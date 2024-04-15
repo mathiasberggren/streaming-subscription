@@ -1,5 +1,6 @@
 import { HttpModule, HttpService } from '@nestjs/axios'
 import { Module } from '@nestjs/common'
+
 import { StreamingApiBuilder, StreamingApiHttpService } from './streaming-api.service'
 
 @Module({

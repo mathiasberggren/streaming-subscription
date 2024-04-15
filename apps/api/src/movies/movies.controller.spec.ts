@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing'
+import { createMock } from '@golevelup/ts-jest'
+
 import { MoviesController } from './movies.controller'
 import { MoviesService } from './movies.service'
 import { MoviesSearchService } from './movies-search.service'
-import { createMock } from '@golevelup/ts-jest'
 import { MoviesSearchApiService } from './movies-search.api.service'
 
 const movies = [

@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { MoviesSearchApiService } from './movies-search.api.service'
-import { ImdbApiHttpService } from './clients/imdb-api.service'
 import { HttpService } from '@nestjs/axios'
 import { createMock } from '@golevelup/ts-jest'
-import { IMDBSearchResponse } from './interfaces/imdb-api.interface'
 import { AxiosResponse } from 'axios'
 import { of } from 'rxjs'
+
+import { IMDBSearchResponse } from './interfaces/imdb-api.interface'
+import { ImdbApiHttpService } from './clients/imdb-api.service'
+import { MoviesSearchApiService } from './movies-search.api.service'
 
 describe('MoviesSearchApiService', () => {
   let service: MoviesSearchApiService

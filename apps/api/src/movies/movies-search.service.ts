@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+
 import { MoviesSearch } from './interfaces/movies-search.interface'
 
 // Only used for NestJS to find the correct provider to inject into MoviesController
