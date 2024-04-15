@@ -9,7 +9,7 @@ const SubscriptionResponseSchema = z.object({
     id: z.number(),
     username: z.string()
     // Hides password in any response payload
-  }).nullable(),
+  }).nullable().optional(),
   createdAt: z.date(),
   updatedAt: z.date()
 })
