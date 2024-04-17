@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && yarn prisma generate",
     "start": "nest start",
     "dev": "vite",
     "start:debug": "nest start --debug --watch",
