@@ -19,6 +19,7 @@
     "@liuli-util/vite-plugin-node": "^0.8.1",
     "@types/puppeteer": "^7.0.4",
     "tsx": "^4.7.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.3",
+    "vite": "^4.0.0"
   }
 }
