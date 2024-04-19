@@ -1,11 +1,20 @@
-import { PrismaClient, Company } from '@prisma/client'
+import { Company } from '@prisma/client'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 
+import prisma from '../client'
+
 export const companyFactory = Factory.define<Company>(({ sequence, onCreate }) => {
   onCreate(async (company) => {
-    const prisma = new PrismaClient()
-    return await prisma.company.create({ data: company })
+    return await prisma.company.create({
+      data: {
+        // ID is auto-generated
+        name: company.name,
+        image: company.image,
+        createdAt: company.createdAt,
+        updatedAt: company.updatedAt
+      }
+    })
   })
 
   return {

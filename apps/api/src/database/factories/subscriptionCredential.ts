@@ -1,6 +1,8 @@
-import { PrismaClient, Subscription, SubscriptionCredential } from '@prisma/client'
+import { Subscription, SubscriptionCredential } from '@prisma/client'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
+
+import prisma from '../client'
 
 import { subscriptionFactory } from './subscription'
 
@@ -9,8 +11,6 @@ interface ISubscriptionCredentialFactory extends SubscriptionCredential {
 }
 export const subscriptionCredentialFactory = Factory.define<ISubscriptionCredentialFactory>(({ sequence, onCreate }) => {
   onCreate(async (credential) => {
-    const prisma = new PrismaClient()
-
     const subscription = await subscriptionFactory.create(credential.subscription)
 
     return await prisma.subscriptionCredential.create({
