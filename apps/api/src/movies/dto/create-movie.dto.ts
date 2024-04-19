@@ -10,7 +10,7 @@ const CreateMovieSchema = z.object({
   genre: z.string(),
   director: z.string(),
   duration: z.number().int(),
-  subtitles: z.string().array().optional(),
+  subtitles: z.string().array().optional().default([]),
   releaseDate: z.date(),
   movieTitles: z.array(createMovieTitleSchema).nonempty()
 })
