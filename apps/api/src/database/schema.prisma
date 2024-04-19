@@ -84,5 +84,6 @@ model MovieTitle {
   Movie        Movie    @relation(fields: [movieId], references: [id]) 
   language     String
   @@map("movie_titles")
+)
 }
 
