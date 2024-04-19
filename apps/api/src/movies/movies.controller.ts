@@ -1,5 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException } from '@nestjs/common'
-import { Movie } from '@prisma/client'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
 
 import { MoviesService } from './movies.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
@@ -21,10 +20,6 @@ export class MoviesController {
 
   @Post()
   async create (@Body() createMovieDto: CreateMovieDto) {
-    if (createMovieDto.movieTitles.length === 0) {
-      throw new BadRequestException('At least one movie title is required')
-    }
-
     await this.moviesService.create(createMovieDto)
 
     return { message: 'Movie created successfully' }

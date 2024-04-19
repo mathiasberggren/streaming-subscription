@@ -9,10 +9,10 @@ const createMovieTitleSchema = z.object({
 const CreateMovieSchema = z.object({
   genre: z.string(),
   director: z.string(),
-  duration: z.number(),
-  subtitles: z.array(z.string()),
+  duration: z.number().int(),
+  subtitles: z.string().array().optional(),
   releaseDate: z.date(),
-  movieTitles: z.array(createMovieTitleSchema)
+  movieTitles: z.array(createMovieTitleSchema).nonempty()
 })
 
 export class CreateMovieDto extends createZodDto(CreateMovieSchema) {}
