@@ -74,6 +74,7 @@ model Movie {
   releaseDate      DateTime @map("release_date")
 
   movieTitle       MovieTitle[]
+  @@map("movies")
 }
 
 model MovieTitle {
