@@ -73,7 +73,7 @@ model Movie {
   subtitles        String[]
   releaseDate      DateTime @map("release_date")
 
-  movieTitles       MovieTitle[]
+  movieTitle       MovieTitle[]
   @@map("movies")
 }
 
