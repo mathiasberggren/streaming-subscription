@@ -30,7 +30,7 @@ export class MoviesSearchDbService implements MoviesSearch {
   async findByTitle (searchTitle: string, queryLimit: number = 10): Promise<MovieWithTitle[]> {
     const queryResult = await this.db.$queryRaw<MovieWithMovieTitleRow[]>`
       SELECT m.*, t.* FROM "Movie" m
-        JOIN "MovieTitle" t ON m.id = mt."movieId"
+        JOIN "MovieTitle" t ON m.id = t."movieId"
           WHERE t.title % ${searchTitle} 
           ORDER BY similarity(t.title, ${searchTitle}) DESC
         LIMIT ${queryLimit};`
