@@ -14,8 +14,6 @@ import { MoviesSearchDbService } from './movies-search-db/movies-search-db.servi
   controllers: [MoviesController],
   providers: [
     MoviesService,
-
-    // TODO: switch to MoviesSearchDbService as soon as the scraper is implemented
     {
       provide: MoviesSearchService,
       useClass: MoviesSearchDbService
