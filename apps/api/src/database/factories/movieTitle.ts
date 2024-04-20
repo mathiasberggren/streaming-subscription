@@ -11,11 +11,12 @@ class MovieTitleFactory extends Factory<MovieTitle> {
 }
 
 export const movieTitleFactory = MovieTitleFactory.define(({ sequence, onCreate, params }) => {
-  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  if (!params.movieId) {
-    throw new Error('[movieTitleFactory] movieId must be provided')
-  }
   onCreate(async (movieTitle) => {
+    // Require movieId if creating a movieTitle in the DB
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (!params.movieId) {
+      throw new Error('[movieTitleFactory] movieId must be provided')
+    }
     const prisma = new PrismaClient()
 
     return await prisma.movieTitle.create({
@@ -33,7 +34,7 @@ export const movieTitleFactory = MovieTitleFactory.define(({ sequence, onCreate,
 
   return {
     movieTitleId: sequence,
-    movieId: params.movieId,
+    movieId: params.movieId ?? sequence,
     title,
     language
   }
