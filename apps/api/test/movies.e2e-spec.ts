@@ -2,18 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import request from 'supertest'
 import { App } from 'supertest/types'
-import { ConfigModule } from '@nestjs/config'
 
-import { MoviesModule } from '../src/movies/movies.module'
+import { AppModule } from '../src/app/app.module'
 
 describe('MoviesController (e2e)', () => {
   let app: INestApplication
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      // Need to fix a separate config setup in order to dependency
-      // inject the ConfigModule correctly
-      imports: [ConfigModule, MoviesModule]
+      imports: [AppModule]
     }).compile()
 
     app = moduleFixture.createNestApplication()
@@ -22,7 +19,7 @@ describe('MoviesController (e2e)', () => {
 
   it('/api/movies (POST)', () => {
     return request(app.getHttpServer() as App)
-      .post('/api/movies')
+      .post('/movies')
       .send({
         genre: 'Action',
         director: 'John Doe',

@@ -73,7 +73,7 @@ model Movie {
   subtitles        String[]
   releaseDate      DateTime @map("release_date")
 
-  movieTitle       MovieTitle[]
+  movieTitles       MovieTitle[]
   @@map("movies")
 }
 
@@ -83,6 +83,6 @@ model MovieTitle {
   movieId      Int      @map("movie_id")
   Movie        Movie    @relation(fields: [movieId], references: [id]) 
   language     String
-  @@map("movies_titles")
+  @@map("movie_titles")
 }
 

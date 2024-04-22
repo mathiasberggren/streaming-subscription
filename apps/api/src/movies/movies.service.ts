@@ -14,7 +14,7 @@ export class MoviesService {
     const movie = await this.db.movie.create({
       data: {
         ...movieData,
-        movieTitle: {
+        movieTitles: {
           create: movieTitles.map((title) => ({
             title: title.title,
             language: title.language
@@ -22,7 +22,7 @@ export class MoviesService {
         }
       },
       include: {
-        movieTitle: true
+        movieTitles: true
       }
     })
 
