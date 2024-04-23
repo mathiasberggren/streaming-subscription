@@ -4,6 +4,8 @@ import request from 'supertest'
 import { App } from 'supertest/types'
 
 import { AppModule } from '../src/app/app.module'
+import { movieFactory } from '../src/database/factories/movie'
+import { movieTitleFactory } from '../src/database/factories/movieTitle'
 
 describe('MoviesController (e2e)', () => {
   let app: INestApplication
@@ -17,26 +19,33 @@ describe('MoviesController (e2e)', () => {
     await app.init()
   })
 
-  it('/api/movies (POST)', () => {
-    return request(app.getHttpServer() as App)
-      .post('/movies')
-      .send({
-        genre: 'Action',
-        director: 'John Doe',
-        duration: 120,
-        subtitles: ['English', 'Spanish'],
-        releaseDate: '2023-04-01T00:00:00.000Z',
-        movieTitles: [
-          {
-            language: 'English',
-            title: 'Example Title'
-          }
-        ]
-      })
-      .expect(201)
-      .expect({
-        message: 'Movie created successfully'
-      })
+  describe('/movies (POST)', () => {
+    it('should create a movie', async () => {
+      const movie = movieFactory.build()
+      const movieTitle = movieTitleFactory.build()
+
+      return await request(app.getHttpServer() as App)
+        .post('/movies')
+        .send({
+          genre: movie.genre,
+          director: movie.director,
+          duration: movie.duration,
+          subtitles: movie.subtitles,
+          releaseDate: movie.releaseDate,
+          movieTitles: [movieTitle]
+        })
+        .expect(201)
+        .expect({
+          message: 'Movie created successfully'
+        })
+    })
+
+    it('should return 400 if the body is not valid', async () => {
+      return await request(app.getHttpServer() as App)
+        .post('/movies')
+        .send({})
+        .expect(400)
+    })
   })
 
   afterAll(async () => {
