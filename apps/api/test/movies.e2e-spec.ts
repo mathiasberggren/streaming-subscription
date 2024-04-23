@@ -40,7 +40,7 @@ describe('MoviesController (e2e)', () => {
         })
     })
 
-    it('should return 400 if the body is not valid', async () => {
+    it('should return 400 if the body is invalid', async () => {
       return await request(app.getHttpServer() as App)
         .post('/movies')
         .send({})
