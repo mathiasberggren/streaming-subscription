@@ -17,7 +17,16 @@ export const movieFactory = MovieFactory.define(({ sequence, onCreate, params })
   onCreate(async (movie) => {
     const prisma = new PrismaClient()
 
-    const createdMovie = await prisma.movie.create({ data: movie })
+    const createdMovie = await prisma.movie.create({
+      data: {
+        id: movie.id,
+        director: movie.director,
+        genre: movie.genre,
+        duration: movie.duration,
+        subtitles: movie.subtitles,
+        releaseDate: movie.releaseDate
+      }
+    })
 
     // I know this looks horrible, but thinking this is okay since it's just a factory.
     const movieTitles = await Promise.all(
@@ -47,6 +56,6 @@ export const movieFactory = MovieFactory.define(({ sequence, onCreate, params })
     director: faker.person.fullName(),
     duration: faker.number.int({ min: 60, max: 240 }),
     subtitles: faker.helpers.arrayElements(supportedLanguageLocaleCodes, faker.number.int({ min: 0, max: 4 })),
-    releaseDate: new Date()
+    releaseDate: faker.date.between({ from: '1980-01-01', to: '2024-01-01' })
   }
 })
