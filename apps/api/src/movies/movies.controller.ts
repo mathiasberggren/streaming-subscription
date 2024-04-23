@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Movie } from '@prisma/client'
 
 import { MoviesService } from './movies.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
