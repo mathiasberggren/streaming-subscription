@@ -15,6 +15,7 @@ import {
 } from 'nest-winston'
 import * as winston from 'winston'
 import { patchNestJsSwagger } from 'nestjs-zod'
+import cookieParser from 'cookie-parser'
 
 import { AppModule } from './app/app.module'
 
@@ -63,6 +64,7 @@ export async function createApp (
     logger: bootstrapLogger()
   })
 
+  app.use(cookieParser())
   app.setGlobalPrefix(API_PREFIX)
   bootstrapOpenAPI(app)
 

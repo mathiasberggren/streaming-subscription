@@ -13,6 +13,14 @@ export class UsersService {
     return await this.db.user.create({ data: createUserDto })
   }
 
+  async findOrCreate (createUserDto: CreateUserDto) {
+    return await this.db.user.upsert({
+      where: { email: createUserDto.email },
+      update: {},
+      create: createUserDto
+    })
+  }
+
   async findAll () {
     return await this.db.user.findMany()
   }
@@ -20,12 +28,6 @@ export class UsersService {
   async findOne (id: number) {
     return await this.db.user.findUnique({
       where: { id }
-    })
-  }
-
-  async findOneByEmail (email: string) {
-    return await this.db.user.findFirst({
-      where: { email }
     })
   }
 

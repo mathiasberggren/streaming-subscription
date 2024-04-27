@@ -20,6 +20,7 @@ import { HttpExceptionFilter } from './filters/http-exception.filter'
       validate,
       envFilePath: ['.env', '.development.env']
     }),
+
     DatabaseModule,
     MoviesModule,
     SubscriptionsModule,
