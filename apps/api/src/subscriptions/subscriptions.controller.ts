@@ -5,9 +5,9 @@ import { ZodSerializerDto } from 'nestjs-zod'
 import { SubscriptionsService } from './subscriptions.service'
 import { CreateSubscriptionDto } from './dto/create-subscription.dto'
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto'
-import { SubscriptionResponse } from './entities/subscription.entity'
+import { Subscription } from './entities/subscription.entity'
 
-@ZodSerializerDto(SubscriptionResponse)
+@ZodSerializerDto(Subscription)
 @ApiTags('subscriptions')
 @Controller('subscriptions')
 export class SubscriptionsController {
