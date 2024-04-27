@@ -14,6 +14,7 @@ export const userFactory = Factory.define<IUserFactory>(({ sequence, onCreate })
         // ID is auto-generated
         name: user.name,
         email: user.email,
+        picture: user.picture,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
       }
@@ -23,6 +24,7 @@ export const userFactory = Factory.define<IUserFactory>(({ sequence, onCreate })
     id: sequence,
     name: faker.person.fullName(),
     email: faker.internet.email(),
+    picture: faker.image.avatar(),
     createdAt: new Date(),
     updatedAt: new Date()
   }

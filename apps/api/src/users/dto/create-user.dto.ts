@@ -2,9 +2,9 @@ import { createZodDto } from 'nestjs-zod'
 import { z } from 'nestjs-zod/z'
 
 const UserSchema = z.object({
-  id: z.number(),
   name: z.string(),
-  email: z.string().email()
+  email: z.string().email(),
+  picture: z.string().url().optional()
 })
 
 export class CreateUserDto extends createZodDto(UserSchema) {}
