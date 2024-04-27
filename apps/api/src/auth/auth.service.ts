@@ -14,9 +14,14 @@ export class AuthService {
     return this.jwtService.sign(payload)
   }
 
+  // TODO: Implement ProfileDTO for improved validation
   async signIn (profile: Profile) {
     if (!profile) {
       throw new BadRequestException('Unauthenticated')
+    }
+
+    if (!profile.email) {
+      throw new BadRequestException('Email not found')
     }
 
     const user = await this.usersService.findOrCreate({

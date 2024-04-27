@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { PrismaService } from '../database/prisma.service'
 
@@ -39,8 +39,14 @@ export class UsersService {
   }
 
   async remove (id: number) {
-    return await this.db.user.delete({
-      where: { id }
-    })
+    try {
+      return await this.db.user.delete({
+        where: { id }
+      })
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException('User not found')
+      }
+    }
   }
 }
