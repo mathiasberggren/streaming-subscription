@@ -17,7 +17,7 @@ import { HttpExceptionFilter } from './http-exception.filter'
     ConfigModule.forRoot({
       isGlobal: true,
       validate,
-      envFilePath: ['.env', '.env.development']
+      envFilePath: ['.env', '.development.env']
     }),
     DatabaseModule,
     MoviesModule,
