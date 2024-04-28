@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException } from '@nestjs/common'
+import { Movie } from '@prisma/client'
 
 import { MoviesService } from './movies.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
@@ -10,9 +11,7 @@ export class MoviesController {
   constructor (private readonly moviesService: MoviesService, private readonly movieSearchService: MoviesSearchService) {}
 
   @Get('search')
-  // TODO: change return type to Movie[] when the entity is defined
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async findByTitle (@Query('title') title: string): Promise<any> {
+  async findByTitle (@Query('title') title: string): Promise<Movie[]> {
     return await this.movieSearchService.findByTitle(title)
   }
 
@@ -21,8 +20,14 @@ export class MoviesController {
    */
 
   @Post()
-  create (@Body() createMovieDto: CreateMovieDto) {
-    return this.moviesService.create(createMovieDto)
+  async create (@Body() createMovieDto: CreateMovieDto) {
+    if (createMovieDto.movieTitles.length === 0) {
+      throw new BadRequestException('At least one movie title is required')
+    }
+
+    await this.moviesService.create(createMovieDto)
+
+    return { message: 'Movie created successfully' }
   }
 
   @Get()
