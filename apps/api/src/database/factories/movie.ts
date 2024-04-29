@@ -1,13 +1,13 @@
-import { Movie, MovieTitle, PrismaClient } from '@prisma/client'
+import { Movie, MovieTitle } from '@prisma/client'
 import { Factory } from 'fishery'
 import { faker } from '@faker-js/faker'
 
+import prisma from '../client'
 import { supportedLanguageLocaleCodes } from '../../constants'
 
-import { movieTitleFactory } from './movieTitle'
-import { generateMovieTitles } from './utils/generateMovieTitles'
+import { movieTitleFactory, generateMovieTitles } from './movieTitle'
 
-interface IMovieFactory extends Movie {
+export interface IMovieFactory extends Movie {
   movieTitles?: MovieTitle[]
 }
 
@@ -15,8 +15,6 @@ class MovieFactory extends Factory<IMovieFactory> {}
 
 export const movieFactory = MovieFactory.define(({ sequence, onCreate, params }) => {
   onCreate(async (movie) => {
-    const prisma = new PrismaClient()
-
     const createdMovie = await prisma.movie.create({
       data: {
         id: movie.id,
@@ -32,7 +30,7 @@ export const movieFactory = MovieFactory.define(({ sequence, onCreate, params })
     const movieTitles = await Promise.all(
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       params.movieTitles
-        ? params.movieTitles.map(async movieTitle => await movieTitleFactory.create(movieTitle))
+        ? params.movieTitles.map(async movieTitle => await movieTitleFactory.create({ movieId: movie.id, title: movieTitle.title, language: movieTitle.language }))
         : Object.entries(generateMovieTitles()).map(async ([language, title]) => {
           const movieTitleParams = {
             movieId: movie.id,
