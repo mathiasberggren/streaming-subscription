@@ -1,14 +1,18 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class */
-export class CreateMovieDto {
-  genre: string
-  director: string
-  duration: number
-  subtitles: string[]
-  releaseDate: Date
-  movieTitles: CreateMovieTitleDto[]
-}
+import { z } from 'nestjs-zod/z'
+import { createZodDto } from 'nestjs-zod'
 
-export class CreateMovieTitleDto {
-  language: string
-  title: string
-}
+const createMovieTitleSchema = z.object({
+  language: z.string(),
+  title: z.string()
+})
+
+const CreateMovieSchema = z.object({
+  genre: z.string(),
+  director: z.string(),
+  duration: z.number().int(),
+  subtitles: z.string().array().optional().default([]),
+  releaseDate: z.coerce.date(),
+  movieTitles: z.array(createMovieTitleSchema).nonempty()
+})
+
+export class CreateMovieDto extends createZodDto(CreateMovieSchema) {}
