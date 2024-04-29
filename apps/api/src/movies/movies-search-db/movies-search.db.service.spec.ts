@@ -34,8 +34,8 @@ describe('MoviesSearchDbService', () => {
 
     const queryRawCallsString = (queryRawCalls as unknown as string[]).map(elem => elem.replace(/\s+/g, ' ')).join(' ')
 
-    const expectedSqlQuery = ' SELECT m.*, t.* FROM "Movie" m ' +
-      'JOIN "MovieTitle" t ON m.id = t."movieId" ' +
+    const expectedSqlQuery = ' SELECT m.*, t.* FROM "movies" m ' +
+      'JOIN "movie_titles" t ON m.id = t."movie_id" ' +
       'WHERE t.title %   ORDER BY similarity(t.title,  ) DESC LIMIT  ;'
     expect(queryRawSpy).toHaveBeenCalledWith(
       [expect.any(String), expect.any(String), expect.any(String), expect.any(String)],

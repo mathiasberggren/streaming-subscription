@@ -10,11 +10,11 @@ interface MovieWithMovieTitleRow {
   director: string
   duration: number
   subtitles: string[]
-  releaseDate: Date
+  release_date: Date
 
-  movieTitleId: number
+  movie_title_id: number
   title: string
-  movieId: number
+  movie_id: number
   language: string
 }
 
@@ -28,14 +28,31 @@ export class MoviesSearchDbService implements MoviesSearch {
   ) {}
 
   async findByTitle (searchTitle: string, queryLimit: number = 10): Promise<MovieWithTitle[]> {
-    const queryResult = await this.db.$queryRaw<MovieWithMovieTitleRow[]>`
-      SELECT m.*, t.* FROM "Movie" m
-        JOIN "MovieTitle" t ON m.id = t."movieId"
-          WHERE t.title % ${searchTitle} 
-          ORDER BY similarity(t.title, ${searchTitle}) DESC
-        LIMIT ${queryLimit};`
+    const decodedSearchTitle = decodeURIComponent(searchTitle)
 
-    const processedResult = queryResult.reduce<MovieWithTitle[]>((acc, row) => {
+    const queryResult = await this.db.$queryRaw<MovieWithMovieTitleRow[]>`
+      SELECT m.*, t.* FROM "movies" m
+        JOIN "movie_titles" t ON m.id = t."movie_id"
+         WHERE t.title % ${decodedSearchTitle}
+         ORDER BY similarity(t.title, ${decodedSearchTitle}) DESC
+       LIMIT ${queryLimit};`
+
+    const processedResult = queryResult.reduce<MovieWithTitle[]>((acc, snakeCasedRow) => {
+      const row = {
+        id: snakeCasedRow.id,
+        genre: snakeCasedRow.genre,
+        director: snakeCasedRow.director,
+        duration: snakeCasedRow.duration,
+        subtitles: snakeCasedRow.subtitles,
+        releaseDate: new Date(snakeCasedRow.release_date),
+
+        title: snakeCasedRow.title,
+        movieTitleId: snakeCasedRow.movie_title_id,
+        movieId: snakeCasedRow.movie_id,
+        language: snakeCasedRow.language
+
+      }
+
       // Look for if we already processed the movie
       const movie = acc.find(elem => elem.id === row.id)
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
