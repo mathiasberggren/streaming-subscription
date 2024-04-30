@@ -33,7 +33,7 @@ export class MoviesSearchDbService implements MoviesSearch {
     const queryResult = await this.db.$queryRaw<MovieWithMovieTitleRow[]>`
       SELECT m.*, t.* FROM "movies" m
         JOIN "movie_titles" t ON m.id = t."movie_id"
-         WHERE t.title % ${decodedSearchTitle}
+         WHERE ${decodedSearchTitle} % ANY(STRING_TO_ARRAY(t.title, ' '))
          ORDER BY similarity(t.title, ${decodedSearchTitle}) DESC
        LIMIT ${queryLimit};`
 
