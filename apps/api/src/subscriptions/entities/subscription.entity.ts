@@ -1,7 +1,7 @@
 import { createZodDto } from 'nestjs-zod'
 import { z } from 'nestjs-zod/z'
 
-const SubscriptionResponseSchema = z.object({
+const SubscriptionSchema = z.object({
   id: z.number(),
   userId: z.number(),
   companyId: z.number(),
@@ -14,4 +14,4 @@ const SubscriptionResponseSchema = z.object({
   updatedAt: z.date()
 })
 
-export class SubscriptionResponse extends createZodDto(SubscriptionResponseSchema) {}
+export class Subscription extends createZodDto(SubscriptionSchema) {}

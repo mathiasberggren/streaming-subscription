@@ -16,7 +16,7 @@ export default async () => {
     )
     console.info('🟢 - Database is ready!')
 
-    execSync('dotenv -e .env.test -- yarn db:deploy', { stdio: 'inherit' })
+    execSync('dotenv -e .test.env -- yarn db:deploy', { stdio: 'inherit' })
   } catch (e) {
     console.dir(e)
     throw e

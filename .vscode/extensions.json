@@ -3,7 +3,6 @@
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
     "vivaxy.vscode-conventional-commits",
-    "prisma.prisma",
-    "abians.prisma-generate-uml"
+    "prisma.prisma"
   ]
 }
