@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
-import { Movie } from '@prisma/client'
 
+import { Movie } from './entities/movie.entity'
 import { MoviesService } from './movies.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
