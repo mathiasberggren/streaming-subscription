@@ -135,20 +135,19 @@ describe('MoviesController (e2e)', () => {
       ])
     })
 
-    it.todo('should fuzzy match better'
-    // , async () => {
-      // const theMatrixMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix', language: 'en' })] })
-      // const theMatrixReloadedMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix Reloaded', language: 'en' })] })
-      // await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'Not at all related', language: 'en' })] })
+    it('should fuzzy match better', async () => {
+      const theMatrixMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix', language: 'en' })] })
+      const theMatrixReloadedMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix Reloaded', language: 'en' })] })
+      await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'Not at all related', language: 'en' })] })
 
-      // const response = await request(app.getHttpServer()).get('/movies/search?title=matris')
+      const response = await request(app.getHttpServer()).get('/movies/search?title=matris')
 
-      // expect(response.status).toBe(200)
-      // expect(response.body).toEqual([
-      //   theMatrixMovie,
-      //   theMatrixReloadedMovie
-      // ])}
-    )
+      expect(response.status).toBe(200)
+      expect(response.body).toEqual([
+        theMatrixMovie,
+        theMatrixReloadedMovie
+      ])
+    })
 
     it('should return 200 and an empty parameter list if the movie is not found', async () => {
       const response = await request(app.getHttpServer() as App).get('/movies/search?title=not-a-movie')
