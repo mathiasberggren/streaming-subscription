@@ -21,20 +21,20 @@ export class MoviesSearchApiService extends MoviesSearchService {
      * TODO: refactor IMDB API to return the rest of the data
      * - genre
      * - director
+     * - imdbId
      */
     return movies.map(movie => ({
       // Hash string into a number
       id: movie.title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0),
       releaseDate: new Date(`${movie.year}-01-01`),
-      titles: [
+      movieTitles: [
         {
           id: movie.title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0),
           title: movie.title,
+          image: movie.image,
           language: 'en',
           createdAt: new Date(),
           updatedAt: new Date()
-          // TODO: include poster in MovieTitle table
-          // image: movie.image
         }
       ],
       genre: 'TBD',
