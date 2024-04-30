@@ -5,7 +5,7 @@ import { movieFactory } from '../../database/factories/movie'
 import { PrismaService } from '../../database/prisma.service'
 import { movieTitleFactory } from '../../database/factories/movieTitle'
 
-import { MoviesSearchDbService } from './movies-search-db.service'
+import { MoviesSearchDbService } from './movies-search.db.service'
 
 describe('MoviesSearchDbService', () => {
   let service: MoviesSearchDbService

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Movie } from '@prisma/client'
 
-import { MoviesSearch } from './interfaces/movies-search.interface'
+import { MoviesSearch } from '../interfaces/movies-search.interface'
 
 // Only used for NestJS to find the correct provider to inject into MoviesController
 

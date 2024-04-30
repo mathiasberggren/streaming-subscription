@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { firstValueFrom } from 'rxjs'
 
-import { MoviesSearch } from './interfaces/movies-search.interface'
-import { ImdbApiHttpService } from './clients/imdb-api.service'
-import { IMDBMovie } from './interfaces/imdb-api.interface'
+import { MoviesSearch } from '../interfaces/movies-search.interface'
+import { ImdbApiHttpService } from '../clients/imdb-api.service'
+import { IMDBMovie } from '../interfaces/imdb-api.interface'
 
 @Injectable()
 export class MoviesSearchApiService implements MoviesSearch {

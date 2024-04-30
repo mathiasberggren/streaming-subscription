@@ -4,7 +4,7 @@ import { Movie } from '@prisma/client'
 import { MoviesService } from './movies.service'
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
-import { MoviesSearchService } from './movies-search.service'
+import { MoviesSearchService } from './movies-search/movies-search.service'
 
 @Controller('movies')
 export class MoviesController {
