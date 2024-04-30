@@ -66,3 +66,25 @@ model SubscriptionCredential {
 
   @@map("subscription_credentials")
 }
+model Movie {
+  id               Int                     @id @default(autoincrement())
+  genre            String
+  director         String
+  duration         Int
+  subtitles        String[]
+  releaseDate      DateTime @map("release_date")
+
+  movieTitles       MovieTitle[]
+  @@map("movies")
+}
+
+model MovieTitle {
+  movieTitleId Int      @id @default(autoincrement()) @map("movie_title_id")
+  title        String
+  movieId      Int      @map("movie_id")
+  Movie        Movie    @relation(fields: [movieId], references: [id]) 
+  language     String
+
+  @@map("movie_titles")
+}
+

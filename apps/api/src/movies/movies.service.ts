@@ -1,12 +1,32 @@
 import { Injectable } from '@nestjs/common'
 
+import { PrismaService } from '../database/prisma.service'
+
 import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 
 @Injectable()
 export class MoviesService {
-  create (createMovieDto: CreateMovieDto) {
-    return 'This action adds a new movie'
+  constructor (private readonly db: PrismaService) {}
+  async create (createMovieDto: CreateMovieDto) {
+    const { movieTitles, ...movieData } = createMovieDto
+
+    const movie = await this.db.movie.create({
+      data: {
+        ...movieData,
+        movieTitles: {
+          create: movieTitles.map((title) => ({
+            title: title.title,
+            language: title.language
+          }))
+        }
+      },
+      include: {
+        movieTitles: true
+      }
+    })
+
+    return movie
   }
 
   findAll () {

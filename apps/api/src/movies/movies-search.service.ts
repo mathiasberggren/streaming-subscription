@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { Movie } from '@prisma/client'
 
 import { MoviesSearch } from './interfaces/movies-search.interface'
 
@@ -8,5 +9,5 @@ import { MoviesSearch } from './interfaces/movies-search.interface'
 export abstract class MoviesSearchService implements MoviesSearch {
   // TODO: Implement Movie response interface
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  abstract findByTitle (title: string): Promise<any>
+  abstract findByTitle (title: string): Promise<Movie[]>
 }
