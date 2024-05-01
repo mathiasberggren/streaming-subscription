@@ -86,7 +86,7 @@ model MovieTitle {
   id        Int      @id @default(autoincrement())
   title     String
   movieId   Int      @map("movie_id")
-  Movie     Movie    @relation(fields: [movieId], references: [id])
+  movie     Movie    @relation(fields: [movieId], references: [id])
   language  String
   image     String
   createdAt DateTime @default(now()) @map("created_at")
