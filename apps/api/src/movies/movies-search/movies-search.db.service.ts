@@ -16,19 +16,18 @@ export class MoviesSearchDbService extends MoviesSearchService {
     super()
   }
 
-  private async findSimilarity (searchTitle: string, queryLimit: number = 10) {
+  async findSimilarity (searchTitle: string, queryLimit: number = 10) {
     return await this.db.$queryRaw<MovieId[]>`
       SELECT movie_id FROM "movie_titles" m
-         WHERE ${searchTitle} % ANY(STRING_TO_ARRAY(m.title, ' '))
-         ORDER BY similarity(t.title, ${searchTitle}) DESC
-       LIMIT ${queryLimit};`
+      WHERE ${searchTitle} % ANY(STRING_TO_ARRAY(m.title, ' '))
+      ORDER BY similarity(t.title, ${searchTitle}) DESC
+      LIMIT ${queryLimit};`
   }
 
   async findByTitle (searchTitle: string, queryLimit: number = 10) {
     const decodedSearchTitle = decodeURIComponent(searchTitle)
     const movieIds = await this.findSimilarity(decodedSearchTitle, queryLimit)
 
-    // Performs a second db query which is less performant but more type-safe
     const movies = await this.db.movie.findMany({
       where: {
         id: {

@@ -70,6 +70,45 @@ describe('MoviesSearchApiService', () => {
     jest.spyOn(httpService, 'get').mockReturnValue(of(response))
 
     const movies = await service.findByTitle('Mission')
-    expect(movies).toEqual(data.data)
+    expect(movies).toMatchObject(
+      [
+        {
+          createdAt: expect.any(Date),
+          director: 'TBD',
+          genre: 'TBD',
+          id: 4071,
+          movieTitles: [
+            {
+              createdAt: expect.any(Date),
+              id: 4071,
+              image: 'https://m.media-amazon.com/images/M/MV5BY2VmZDhhNjgtNDcxYi00M2I3LThlMTQtMWRiNWI2Y2I4ZjRmXkEyXkFqcGdeQXVyMTMxMTIwMTE0._V1_.jpg',
+              language: 'en',
+              title: 'Mission: Impossible - Dead Reckoning Part One',
+              updatedAt: expect.any(Date)
+            }
+          ],
+          releaseDate: expect.any(Date),
+          updatedAt: expect.any(Date)
+        },
+        {
+          createdAt: expect.any(Date),
+          director: 'TBD',
+          genre: 'TBD',
+          id: 1875,
+          movieTitles: [
+            {
+              createdAt: expect.any(Date),
+              id: 1875,
+              image: 'https://m.media-amazon.com/images/M/MV5BMTc3NjI2MjU0Nl5BMl5BanBnXkFtZTgwNDk3ODYxMTE@._V1_.jpg',
+              language: 'en',
+              title: 'Mission: Impossible',
+              updatedAt: expect.any(Date)
+            }
+          ],
+          releaseDate: expect.any(Date),
+          updatedAt: expect.any(Date)
+        }
+      ]
+    )
   })
 })

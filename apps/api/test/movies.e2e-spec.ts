@@ -40,14 +40,10 @@ describe('MoviesController (e2e)', () => {
           })
 
         expect(response.status).toBe(201)
-        expect(response.body).toEqual({
-          message: 'Movie created successfully'
-        })
+        expect(response.body).toEqual(movie)
       })
 
       it('should store a movie in the database', async () => {
-        await truncateTables()
-
         await request(app.getHttpServer() as App)
           .post('/movies')
           .send({
@@ -70,7 +66,7 @@ describe('MoviesController (e2e)', () => {
         })
 
         const { id, ...movieWithoutId } = movie
-        const { movieTitleId, movieId, ...movieTitleWithoutIds } = movieTitle
+        const { id, movieId, ...movieTitleWithoutIds } = movieTitle
         expect(movieInDatabase).toMatchObject({
           ...movieWithoutId,
           movieTitles: [movieTitleWithoutIds]

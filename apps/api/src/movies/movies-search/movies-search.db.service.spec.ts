@@ -1,71 +1,66 @@
-import { Test, TestingModule } from '@nestjs/testing'
-import { createMock } from '@golevelup/ts-jest'
+import { TestBed } from '@automock/jest'
 
 import { movieFactory } from '../../database/factories/movie'
 import { PrismaService } from '../../database/prisma.service'
-import { movieTitleFactory } from '../../database/factories/movieTitle'
 
 import { MoviesSearchDbService } from './movies-search.db.service'
 
 describe('MoviesSearchDbService', () => {
   let service: MoviesSearchDbService
 
-  let module: TestingModule
-  let prismaService: PrismaService
+  const queryRawMock = jest.fn()
+  const findManyMock = jest.fn()
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      providers: [MoviesSearchDbService, PrismaService]
-    })
-      .useMocker(createMock)
+    const { unit } = TestBed.create(MoviesSearchDbService)
+      .mock(PrismaService)
+      .using({
+        $queryRaw: queryRawMock.mockResolvedValue([]),
+        movie: {
+          findMany: findManyMock.mockResolvedValue([])
+        }
+      })
       .compile()
 
-    service = module.get<MoviesSearchDbService>(MoviesSearchDbService)
-    prismaService = module.get<PrismaService>(PrismaService)
+    service = unit
   })
 
-  it.only('should call the database with the search title', async () => {
-    const queryRawSpy = jest.spyOn(prismaService, '$queryRaw').mockResolvedValueOnce([])
+  describe('findSimilarity', () => {
+    it('should run a raw query', async () => {
+      const title = 'Any Title'
+      await service.findSimilarity(title)
 
-    const title = 'Any Title'
-    await service.findByTitle(title)
-
-    const queryRawCalls = queryRawSpy.mock.calls[0][0]
-
-    const queryRawCallsString = (queryRawCalls as unknown as string[]).map(elem => elem.replace(/\s+/g, ' ')).join(' ')
-
-    const expectedSqlQuery = ' SELECT m.*, t.* FROM "movies" m ' +
-      'JOIN "movie_titles" t ON m.id = t."movie_id" ' +
-      'WHERE t.title %   ORDER BY similarity(t.title,  ) DESC LIMIT  ;'
-    expect(queryRawSpy).toHaveBeenCalledWith(
-      [expect.any(String), expect.any(String), expect.any(String), expect.any(String)],
-      title, title, 10)
-
-    expect(queryRawCallsString).toBe(expectedSqlQuery)
+      expect(queryRawMock).toHaveBeenCalledWith([
+        '\n      SELECT movie_id FROM "movie_titles" m\n      WHERE ',
+        " % ANY(STRING_TO_ARRAY(m.title, ' '))\n" +
+          '      ORDER BY similarity(t.title, ',
+        ') DESC\n      LIMIT ',
+        ';'
+      ], title, title, 10)
+    })
   })
 
-  it('should handle empty results from the database', async () => {
-    jest.spyOn(prismaService, '$queryRaw').mockResolvedValueOnce([])
+  describe('findByTitle', () => {
+    it('should handle empty results from the database', async () => {
+      const results = await service.findByTitle('Nonexistent Movie')
 
-    const results = await service.findByTitle('Nonexistent Movie')
+      expect(results).toEqual([])
+    })
 
-    expect(results).toEqual([])
-  })
+    it('should handle database errors by throwing', async () => {
+      findManyMock.mockRejectedValueOnce(new Error('Database error'))
 
-  it('should handle database errors by throwing', async () => {
-    jest.spyOn(prismaService, '$queryRaw').mockRejectedValueOnce(new Error('Database error'))
+      await expect(service.findByTitle('The Matrix')).rejects.toThrow('Database error')
+    })
 
-    await expect(service.findByTitle('The Matrix')).rejects.toThrow('Database error')
-  })
+    it('should return a movie', async () => {
+      const movie = movieFactory.build()
 
-  it('should post-process data correctly', async () => {
-    const mockMovieData = movieFactory.build()
-    const mockMovieTitleData = movieTitleFactory.build()
+      findManyMock.mockResolvedValueOnce([movie])
 
-    jest.spyOn(prismaService, '$queryRaw').mockResolvedValueOnce([{ ...mockMovieData, ...mockMovieTitleData }])
+      const result = await service.findByTitle('Mock Title')
 
-    const result = await service.findByTitle('Mock Title')
-
-    expect(result).toEqual([{ ...mockMovieData, movieTitles: [mockMovieTitleData] }])
+      expect(result).toEqual([movie])
+    })
   })
 })

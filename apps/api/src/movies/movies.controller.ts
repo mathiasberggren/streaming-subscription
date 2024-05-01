@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common'
+import { ZodSerializerDto } from 'nestjs-zod'
 
 import { Movie } from './entities/movie.entity'
 import { MoviesService } from './movies.service'
@@ -6,6 +7,7 @@ import { CreateMovieDto } from './dto/create-movie.dto'
 import { UpdateMovieDto } from './dto/update-movie.dto'
 import { MoviesSearchService } from './movies-search/movies-search.service'
 
+@ZodSerializerDto(Movie)
 @Controller('movies')
 export class MoviesController {
   constructor (private readonly moviesService: MoviesService, private readonly movieSearchService: MoviesSearchService) {}
@@ -21,9 +23,7 @@ export class MoviesController {
 
   @Post()
   async create (@Body() createMovieDto: CreateMovieDto) {
-    await this.moviesService.create(createMovieDto)
-
-    return { message: 'Movie created successfully' }
+    return await this.moviesService.create(createMovieDto)
   }
 
   @Get()
