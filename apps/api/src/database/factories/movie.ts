@@ -7,13 +7,19 @@ import prisma from '../client'
 import { movieTitleFactory } from './movieTitle'
 
 export interface IMovieFactory extends Movie {
-  movieTitles?: MovieTitle[]
+  movieTitles: MovieTitle[]
 }
 
 class MovieFactory extends Factory<IMovieFactory> {
   withLanguages (languages: string[]) {
     return this.associations({
       movieTitles: languages.map(language => movieTitleFactory.build({ language }))
+    })
+  }
+
+  withTitle (title: string) {
+    return this.associations({
+      movieTitles: [movieTitleFactory.build({ title })]
     })
   }
 }

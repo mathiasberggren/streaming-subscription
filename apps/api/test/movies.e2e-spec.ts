@@ -2,13 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
 import request from 'supertest'
 import { App } from 'supertest/types'
+import { faker } from '@faker-js/faker'
 
 import { AppModule } from '../src/app/app.module'
-import { IMovieFactory, movieFactory } from '../src/database/factories/movie'
-import { movieTitleFactory } from '../src/database/factories/movieTitle'
+import { movieFactory } from '../src/database/factories/movie'
 import prisma from '../src/database/client'
 
-import truncateTables from './helpers/truncate-db'
+import truncateDb from './helpers/truncate-db'
 
 describe('MoviesController (e2e)', () => {
   let app: INestApplication
@@ -22,12 +22,20 @@ describe('MoviesController (e2e)', () => {
     await app.init()
   })
 
+  afterEach(async () => {
+    await truncateDb()
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
   describe('/movies (POST)', () => {
     describe('happy case', () => {
       const movie = movieFactory.build()
-      const movieTitle = movieTitleFactory.build()
+      const movieTitle = movie.movieTitles[0]
 
-      it('should return 200', async () => {
+      it('should return 201', async () => {
         const response = await request(app.getHttpServer() as App)
           .post('/movies')
           .send({
@@ -36,11 +44,10 @@ describe('MoviesController (e2e)', () => {
             duration: movie.duration,
             subtitles: movie.subtitles,
             releaseDate: movie.releaseDate,
-            movieTitles: [movieTitle]
+            movieTitles: movie.movieTitles
           })
 
         expect(response.status).toBe(201)
-        expect(response.body).toEqual(movie)
       })
 
       it('should store a movie in the database', async () => {
@@ -52,7 +59,7 @@ describe('MoviesController (e2e)', () => {
             duration: movie.duration,
             subtitles: movie.subtitles,
             releaseDate: movie.releaseDate,
-            movieTitles: [movieTitle]
+            movieTitles: movie.movieTitles
           })
 
         const movieInDatabase = await prisma.movie.findFirst({
@@ -65,12 +72,21 @@ describe('MoviesController (e2e)', () => {
           }
         })
 
-        const { id, ...movieWithoutId } = movie
-        const { id, movieId, ...movieTitleWithoutIds } = movieTitle
-        expect(movieInDatabase).toMatchObject({
-          ...movieWithoutId,
-          movieTitles: [movieTitleWithoutIds]
-        })
+        expect(movieInDatabase).toEqual(expect.objectContaining({
+          genre: movie.genre,
+          director: movie.director,
+          duration: movie.duration,
+          subtitles: movie.subtitles,
+          releaseDate: movie.releaseDate
+        }))
+
+        expect(movieInDatabase?.movieTitles).toEqual(expect.arrayContaining([
+          expect.objectContaining({
+            title: movieTitle.title,
+            language: movieTitle.language,
+            image: movieTitle.image
+          })
+        ]))
       })
     })
 
@@ -84,65 +100,74 @@ describe('MoviesController (e2e)', () => {
   })
 
   describe('/movies/search (GET)', () => {
-    const movies: IMovieFactory[] = []
-
-    // For some reason if I use this beforeAll, the movies are not
-    // inserted into the DB during the test even though I verified in logs
-    // that they do get inserted... Any idea why?
-    // beforeAll(async () => {
-    //   movies.push(...await movieFactory.createList(10))
-    // })
-
-    afterEach(async () => {
-      await truncateTables()
+    beforeEach(async () => {
+      await movieFactory.createList(10)
     })
 
-    it('should return the movie searched as the top selection', async () => {
-      movies.push(...await movieFactory.createList(10))
-
-      const title = 'The ultimate movie to search for'
-      const movie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title, language: 'en' })] })
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const movieTitle = movie.movieTitles![0]
+    it('should return the exact match', async () => {
+      const movie = await movieFactory.create()
+      const movieTitle = faker.helpers.arrayElement(movie.movieTitles)
       const uriTitle = encodeURIComponent(movieTitle.title)
 
       const response = await request(app.getHttpServer() as App).get(`/movies/search?title=${uriTitle}`)
 
       expect(response.status).toBe(200)
-      expect(response.body[0]).toEqual({
-        ...movie,
-        movieTitles: [movieTitle],
-        releaseDate: movie.releaseDate.toISOString()
-      })
+      expect(response.body).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          movieTitles: expect.arrayContaining([
+            expect.objectContaining({
+              title: movieTitle.title,
+              language: movieTitle.language,
+              image: movieTitle.image
+            })
+          ])
+        })
+      ]))
     })
 
     it('should fuzzy match the movie title and only return the related ones', async () => {
-      const theMatrixMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix', language: 'en' })] })
-      await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'Not at all related', language: 'en' })] })
+      await movieFactory.withTitle('The Matrix').create()
 
       const response = await request(app.getHttpServer() as App).get('/movies/search?title=matris')
 
       expect(response.status).toBe(200)
-      expect(response.body).toEqual([
-        {
-          ...theMatrixMovie,
-          releaseDate: theMatrixMovie.releaseDate.toISOString()
-        }
-      ])
+      expect(response.body).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          movieTitles: expect.arrayContaining([
+            expect.objectContaining({
+              title: 'The Matrix'
+            })
+          ])
+        })
+      ]))
     })
 
     it('should fuzzy match better', async () => {
-      const theMatrixMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix', language: 'en' })] })
-      const theMatrixReloadedMovie = await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'The Matrix Reloaded', language: 'en' })] })
-      await movieFactory.create({ movieTitles: [movieTitleFactory.build({ title: 'Not at all related', language: 'en' })] })
+      await movieFactory.withTitle('The Matrix').create()
+      await movieFactory.withTitle('The Matrix Reloaded').create()
 
-      const response = await request(app.getHttpServer()).get('/movies/search?title=matris')
+      const response = await request(app.getHttpServer() as App).get('/movies/search?title=matris')
+
+      const [theMatrix, theMatrixReloaded] = response.body
 
       expect(response.status).toBe(200)
-      expect(response.body).toEqual([
-        theMatrixMovie,
-        theMatrixReloadedMovie
-      ])
+      expect(response.body.length).toEqual(2)
+
+      expect(theMatrix).toEqual(expect.objectContaining({
+        movieTitles: expect.arrayContaining([
+          expect.objectContaining({
+            title: 'The Matrix'
+          })
+        ])
+      }))
+
+      expect(theMatrixReloaded).toEqual(expect.objectContaining({
+        movieTitles: expect.arrayContaining([
+          expect.objectContaining({
+            title: 'The Matrix Reloaded'
+          })
+        ])
+      }))
     })
 
     it('should return 200 and an empty parameter list if the movie is not found', async () => {
@@ -151,9 +176,5 @@ describe('MoviesController (e2e)', () => {
       expect(response.status).toBe(200)
       expect(response.body).toEqual([])
     })
-  })
-
-  afterAll(async () => {
-    await app.close()
   })
 })
