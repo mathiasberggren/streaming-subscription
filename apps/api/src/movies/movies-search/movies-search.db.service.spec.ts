@@ -31,12 +31,12 @@ describe('MoviesSearchDbService', () => {
       await service.findSimilarity(title)
 
       expect(queryRawMock).toHaveBeenCalledWith([
-        '\n      SELECT movie_id FROM "movie_titles" m\n      WHERE ',
-        " % ANY(STRING_TO_ARRAY(m.title, ' '))\n" +
-          '      ORDER BY similarity(t.title, ',
+        '\n      SELECT movie_id FROM "movie_titles" mt\n      WHERE similarity(mt.title, ',
+        ') > ',
+        '\n      ORDER BY similarity(mt.title, ',
         ') DESC\n      LIMIT ',
-        ';'
-      ], title, title, 10)
+        ';\n    '
+      ], title, 0.2, title, 10)
     })
   })
 

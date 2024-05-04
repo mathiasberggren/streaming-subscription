@@ -23,7 +23,7 @@ export class MoviesSearchDbService extends MoviesSearchService {
       SELECT movie_id FROM "movie_titles" mt
       WHERE similarity(mt.title, ${searchTitle}) > ${SIMILARITY_THRESHOLD}
       ORDER BY similarity(mt.title, ${searchTitle}) DESC
-      LIMIT 10;
+      LIMIT ${queryLimit};
     `
   }
 
