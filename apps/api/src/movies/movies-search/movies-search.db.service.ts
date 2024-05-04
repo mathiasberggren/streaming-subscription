@@ -8,6 +8,8 @@ interface MovieId {
   movie_id: number
 }
 
+const SIMILARITY_THRESHOLD = 0.2
+
 @Injectable()
 export class MoviesSearchDbService extends MoviesSearchService {
   constructor (
@@ -18,10 +20,11 @@ export class MoviesSearchDbService extends MoviesSearchService {
 
   async findSimilarity (searchTitle: string, queryLimit: number = 10) {
     return await this.db.$queryRaw<MovieId[]>`
-      SELECT movie_id FROM "movie_titles" m
-      WHERE ${searchTitle} % ANY(STRING_TO_ARRAY(m.title, ' '))
-      ORDER BY similarity(t.title, ${searchTitle}) DESC
-      LIMIT ${queryLimit};`
+      SELECT movie_id FROM "movie_titles" mt
+      WHERE similarity(mt.title, ${searchTitle}) > ${SIMILARITY_THRESHOLD}
+      ORDER BY similarity(mt.title, ${searchTitle}) DESC
+      LIMIT 10;
+    `
   }
 
   async findByTitle (searchTitle: string, queryLimit: number = 10) {
