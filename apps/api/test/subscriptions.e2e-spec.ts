@@ -9,6 +9,8 @@ import { userFactory } from '../src/database/factories/user'
 import { companyFactory } from '../src/database/factories/company'
 import { subscriptionFactory } from '../src/database/factories/subscription'
 
+import truncateDb from './helpers/truncate-db'
+
 describe('SubscriptionsController (e2e)', () => {
   let app: INestApplication<Server>
 
@@ -19,6 +21,10 @@ describe('SubscriptionsController (e2e)', () => {
 
     app = moduleFixture.createNestApplication()
     await app.init()
+  })
+
+  afterEach(async () => {
+    await truncateDb()
   })
 
   afterAll(async () => {

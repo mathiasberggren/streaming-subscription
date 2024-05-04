@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt'
 
 import { AppModule } from '../src/app/app.module'
 
+import truncateDb from './helpers/truncate-db'
+
 describe('AuthController (e2e)', () => {
   let app: INestApplication<Server>
 
@@ -37,6 +39,10 @@ describe('AuthController (e2e)', () => {
 
     app = moduleFixture.createNestApplication()
     await app.init()
+  })
+
+  afterEach(async () => {
+    await truncateDb()
   })
 
   afterAll(async () => {

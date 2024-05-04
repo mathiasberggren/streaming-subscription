@@ -6,6 +6,5 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
-  "setupFilesAfterEnv": ["./helpers/setup.ts"],
   "globalSetup": "./helpers/global-setup.ts"
 }
