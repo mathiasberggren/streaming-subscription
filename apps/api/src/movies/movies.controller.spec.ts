@@ -3,8 +3,8 @@ import { createMock } from '@golevelup/ts-jest'
 
 import { MoviesController } from './movies.controller'
 import { MoviesService } from './movies.service'
-import { MoviesSearchService } from './movies-search.service'
-import { MoviesSearchApiService } from './movies-search.api.service'
+import { MoviesSearchService } from './movies-search/movies-search.service'
+import { MoviesSearchApiService } from './movies-search/movies-search.api.service'
 
 const movies = [
   {

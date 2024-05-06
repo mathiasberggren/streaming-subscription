@@ -1,103 +1,52 @@
-import { MovieTitle } from '@prisma/client'
+import { Movie, MovieTitle } from '@prisma/client'
 import { Factory } from 'fishery'
-import { faker } from '@faker-js/faker'
+import { allFakers, faker } from '@faker-js/faker'
 
-import { supportedLanguageLocaleCodes, Language } from '../../constants'
 import prisma from '../client'
+import { supportedLanguages } from '../../constants'
 
-class MovieTitleFactory extends Factory<MovieTitle> {
+import { movieFactory } from './movie'
 
+interface IMovieTitleFactory extends MovieTitle {
+  movie?: Movie
 }
+class MovieTitleFactory extends Factory<IMovieTitleFactory> {}
 
 export const movieTitleFactory = MovieTitleFactory.define(({ sequence, onCreate, params }) => {
   onCreate(async (movieTitle) => {
-    // Require movieId if creating a movieTitle in the DB
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (!params.movieId) {
-      throw new Error('[movieTitleFactory] movieId must be provided')
+    // Create a movie if not provided
+    if (!movieTitle.movie) {
+      movieTitle.movie = await movieFactory.create(movieTitle.movie)
     }
 
     return await prisma.movieTitle.create({
-      data: movieTitle
+      data: {
+        title: movieTitle.title,
+        language: movieTitle.language,
+        image: movieTitle.image,
+        movie: {
+          connect: {
+            id: movieTitle.movie.id
+          }
+        }
+      },
+      include: {
+        movie: true
+      }
     })
   })
 
-  const language = (params?.language !== undefined && params.language in supportedLanguageLocaleCodes)
-    ? params.language as Language
-    : faker.helpers.arrayElement(supportedLanguageLocaleCodes)
-
-  const title = params.title ?? generateMovieTitles([language])[language]
+  const language = supportedLanguages.find(supportedLanguage => supportedLanguage === params.language) ?? 'en'
+  // @ts-expect-error - TS doesn't know that allFakers[language] is a valid faker instance
+  const title = params.title ?? allFakers[language].word.words({ count: { min: 3, max: 10 } })
 
   return {
-    movieTitleId: sequence,
-    movieId: params.movieId ?? sequence,
+    id: sequence,
+    movieId: sequence,
     title,
-    language
+    language,
+    image: faker.image.urlLoremFlickr({ category: 'movie' }),
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 })
-
-type Words = 'adjectives' | 'nouns' | 'verbs'
-
-// Enforce the wordlists to have the same keys as the supported locale codes
-const wordLists: Record<Language, Record<Words, string[]>> = {
-  en: {
-    adjectives: ['Quick', 'Bright', 'Dark'],
-    nouns: ['Fox', 'Star', 'Shadow'],
-    verbs: ['Jumps', 'Falls', 'Rises']
-  },
-  es: {
-    adjectives: ['Rápido', 'Brillante', 'Oscuro'],
-    nouns: ['Zorro', 'Estrella', 'Sombra'],
-    verbs: ['Salta', 'Cae', 'Asciende']
-  },
-  pt: {
-    adjectives: ['Rápido', 'Brilhante', 'Escuro'],
-    nouns: ['Raposa', 'Estrela', 'Sombra'],
-    verbs: ['Salta', 'Cai', 'Sobe']
-  },
-  se: {
-    adjectives: ['Snabb', 'Ljus', 'Mörk'],
-    nouns: ['Räv', 'Stjärna', 'Skugga'],
-    verbs: ['Hoppa', 'Fall', 'Stiger']
-  },
-  fr: {
-    adjectives: ['Rapide', 'Brillant', 'Obscur'],
-    nouns: ['Renard', 'Étoile', 'Ombre'],
-    verbs: ['Saute', 'Tombe', 'Monte']
-  },
-  de: {
-    adjectives: ['Schnell', 'Hell', 'Dunkel'],
-    nouns: ['Fuchs', 'Stern', 'Schatten'],
-    verbs: ['Springt', 'Fällt', 'Steigt']
-  },
-  it: {
-    adjectives: ['Veloce', 'Luminoso', 'Oscuro'],
-    nouns: ['Volpe', 'Stella', 'Ombra'],
-    verbs: ['Salta', 'Cade', 'Sale']
-  }
-} as const
-
-export function generateMovieTitles (languages?: Language[]): Record<Language, string> {
-  const adjectiveIndex = Math.floor(Math.random() * wordLists.en.adjectives.length)
-  const nounIndex = Math.floor(Math.random() * wordLists.en.nouns.length)
-  const verbIndex = Math.floor(Math.random() * wordLists.en.verbs.length)
-
-  if (languages === null || languages === undefined || languages.length === 0) {
-    const keys = Object.keys(wordLists) as Array<keyof typeof wordLists>
-
-    // Pick languages with a 50% chance that the title exists on that language
-    languages = keys.filter(_ => Math.random() > 0.5)
-  }
-
-  const titles = languages.reduce((acc, language) => {
-    const words = wordLists[language]
-    const adjective = words.adjectives[adjectiveIndex]
-    const noun = words.nouns[nounIndex]
-    const verb = words.verbs[verbIndex]
-
-    return { ...acc, [language]: `${adjective} ${noun} ${verb}` }
-  // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter, @typescript-eslint/consistent-type-assertions
-  }, {} as Record<Language, string>)
-
-  return titles
-}

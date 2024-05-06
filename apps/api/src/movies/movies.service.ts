@@ -17,7 +17,8 @@ export class MoviesService {
         movieTitles: {
           create: movieTitles.map((title) => ({
             title: title.title,
-            language: title.language
+            language: title.language,
+            image: title.image
           }))
         }
       },
@@ -29,8 +30,12 @@ export class MoviesService {
     return movie
   }
 
-  findAll () {
-    return 'This action returns all movies'
+  async findAll () {
+    return await this.db.movie.findMany({
+      include: {
+        movieTitles: true
+      }
+    })
   }
 
   findOne (id: number) {

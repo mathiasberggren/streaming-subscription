@@ -3,7 +3,8 @@ import { createZodDto } from 'nestjs-zod'
 
 const createMovieTitleSchema = z.object({
   language: z.string(),
-  title: z.string()
+  title: z.string(),
+  image: z.string()
 })
 
 const CreateMovieSchema = z.object({

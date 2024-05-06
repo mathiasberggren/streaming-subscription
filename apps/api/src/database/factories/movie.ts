@@ -1,51 +1,56 @@
 import { Movie, MovieTitle } from '@prisma/client'
 import { Factory } from 'fishery'
-import { faker } from '@faker-js/faker'
+import { faker, allLocales } from '@faker-js/faker'
 
 import prisma from '../client'
-import { supportedLanguageLocaleCodes } from '../../constants'
 
-import { movieTitleFactory, generateMovieTitles } from './movieTitle'
+import { movieTitleFactory } from './movieTitle'
 
 export interface IMovieFactory extends Movie {
-  movieTitles?: MovieTitle[]
+  movieTitles: MovieTitle[]
 }
 
-class MovieFactory extends Factory<IMovieFactory> {}
+class MovieFactory extends Factory<IMovieFactory> {
+  withLanguages (languages: string[]) {
+    return this.associations({
+      movieTitles: languages.map(language => movieTitleFactory.build({ language }))
+    })
+  }
 
-export const movieFactory = MovieFactory.define(({ sequence, onCreate, params }) => {
+  withTitle (title: string) {
+    return this.associations({
+      movieTitles: [movieTitleFactory.build({ title })]
+    })
+  }
+}
+
+export const movieFactory = MovieFactory.define(({ sequence, onCreate, afterCreate }) => {
   onCreate(async (movie) => {
-    const createdMovie = await prisma.movie.create({
+    // Ensure at least 1 MovieTitle is always created
+    const movieTitles = !movie.movieTitles ? [] : movie.movieTitles.map(({ id, movieId, ...movieTitle }) => movieTitle)
+    if (movieTitles.length === 0) {
+      const { id, movieId, ...movieTitle } = movieTitleFactory.build()
+      movieTitles.push(movieTitle)
+    }
+
+    return await prisma.movie.create({
       data: {
-        id: movie.id,
         director: movie.director,
         genre: movie.genre,
         duration: movie.duration,
         subtitles: movie.subtitles,
-        releaseDate: movie.releaseDate
+        releaseDate: movie.releaseDate,
+
+        movieTitles: {
+          createMany: {
+            data: movieTitles
+          }
+        }
+      },
+      include: {
+        movieTitles: true
       }
     })
-
-    // I know this looks horrible, but thinking this is okay since it's just a factory.
-    const movieTitles = await Promise.all(
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      params.movieTitles
-        ? params.movieTitles.map(async movieTitle => await movieTitleFactory.create({ movieId: movie.id, title: movieTitle.title, language: movieTitle.language }))
-        : Object.entries(generateMovieTitles()).map(async ([language, title]) => {
-          const movieTitleParams = {
-            movieId: movie.id,
-            language,
-            title
-          }
-
-          return await movieTitleFactory.create(movieTitleParams)
-        })
-    )
-
-    return {
-      ...createdMovie,
-      movieTitles
-    }
   })
 
   return {
@@ -53,7 +58,10 @@ export const movieFactory = MovieFactory.define(({ sequence, onCreate, params })
     genre: faker.music.genre(),
     director: faker.person.fullName(),
     duration: faker.number.int({ min: 60, max: 240 }),
-    subtitles: faker.helpers.arrayElements(supportedLanguageLocaleCodes, faker.number.int({ min: 0, max: 4 })),
-    releaseDate: faker.date.between({ from: '1980-01-01', to: '2024-01-01' })
+    movieTitles: [movieTitleFactory.build()],
+    subtitles: [faker.helpers.objectKey(allLocales)],
+    releaseDate: faker.date.between({ from: '1980-01-01', to: '2024-01-01' }),
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 })
