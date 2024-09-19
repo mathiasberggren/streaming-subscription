@@ -1,10 +1,45 @@
+## [1.11.0] 2024-09-13
+
+## Updated dependencies
+
+- Update expo sdk 50 to 51
+- Updated @react-native-masked-view/masked-view@0.3.0 to version: 0.3.1
+- Updated expo-asset@9.0.2 to version: ~10.0.10
+- Updated expo-font@11.10.3 to version: ~12.0.10
+- Updated expo-linear-gradient@12.7.2 to version: ~13.0.2
+- Updated expo-modules-core@1.11.14 to version: ~1.12.24
+- Updated expo-splash-screen@0.26.5 to version: ~0.27.5
+- Updated react-native@0.73.6 to version: 0.74.5
+- Updated react-native-gesture-handler@2.14.1 to version: ~2.16.1
+- Updated react-native-reanimated@3.6.3 to version: ~3.10.1
+- Updated react-native-safe-area-context@4.8.2 to version: 4.10.5
+- Updated react-native-screens@3.29.0 to version: 3.31.1
+- Updated babel-preset-expo@10.0.2 to version: ~11.0.0
+
+## [1.10.0] 2024-04-10
+
+## Updated dependencies
+
+- Updated @react-native-masked-view/masked-view@0.2.8 to version: 0.3.0
+- Updated expo-asset@8.9.1 to version: ~9.0.2
+- Updated expo-font@11.1.1 to version: ~11.10.3
+- Updated expo-linear-gradient@12.1.2 to version: ~12.7.2
+- Updated expo-modules-core@1.2.7 to version: ~1.11.13
+- Updated expo-splash-screen@0.18.2 to version: ~0.26.4
+- Updated react-native@0.71.8 to version: 0.73.6
+- Updated react-native-gesture-handler@2.9.0 to version: ~2.14.0
+- Updated react-native-reanimated@2.14.4 to version: ~3.6.2
+- Updated react-native-safe-area-context@4.5.0 to version: 4.8.2
+- Updated react-native-screens@3.20.0 to version: ~3.29.0
+- Updated babel-preset-expo@9.3.2 to version: ^10.0.0
+
 ## [1.9.0] 2023-05-15
 
 ## Updated dependencies
 
 -Expo sdk updated from 45 to 48
 -react update from 17 to 18
--react native version updated 0.68 to 0.71.7 
+-react native version updated 0.68 to 0.71.7
 -Other packages updated according to expo sdk.
 -expo-app-loading package is deprecated. Added a new package expo-splash-screen. For this,App.js file
 
